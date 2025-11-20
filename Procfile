@@ -1,0 +1,1 @@
+web: gunicorn js_glitz_inventarios.wsgi:application

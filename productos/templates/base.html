@@ -1,0 +1,326 @@
+{% load static %}
+{% load roles %}
+<!DOCTYPE html>
+<html lang="es" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Js Glitz 🍷{% endblock %}</title>
+
+  <!-- Bootstrap + Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+
+  <style>
+    :root{
+      --bg: #0c0f14; --bg-soft:#11151b; --panel: rgba(255,255,255,.04);
+      --border: rgba(255,255,255,.08); --text:#e6ecf2; --muted:#9aa5b1;
+      --primary:#e74a67; --primary-600:#cf3f59; --accent:#ffd166;
+      --success:#1dd1a1; --danger:#ff6b6b; --ring: rgba(231, 74, 103, .45);
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg:#f6f8fb; --bg-soft:#ffffff; --panel:#ffffff; --border:#e9eef5;
+        --text:#0b1220; --muted:#5b6878; --primary:#d53f5a; --primary-600:#b9354c;
+        --accent:#8a5cf6; --success:#0aa37f; --danger:#e45858; --ring: rgba(213,63,90,.35);
+        --shadow: 0 10px 30px rgba(12,18,32,.07);
+      }
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; color:var(--text);
+      background:
+        radial-gradient(1200px 1200px at 120% -10%, rgba(231,74,103,.12) 0%, transparent 40%),
+        radial-gradient(1400px 1000px at -10% -20%, rgba(138,92,246,.12) 0%, transparent 45%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      display:flex; flex-direction:column;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Header sticky con blur y borde */
+    .app-header{
+      position:sticky; top:0; z-index:1020;
+      backdrop-filter: saturate(140%) blur(10px);
+      background: color-mix(in oklab, var(--bg-soft) 70%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .brand { display:flex; align-items:center; gap:.75rem; text-decoration:none; color:inherit; }
+    .brand-logo { height:40px; width:40px; border-radius:10px; object-fit:cover; box-shadow:var(--shadow) }
+    .brand-title { font-weight:800; letter-spacing:.3px; font-size:1.05rem; }
+
+    /* Navbar pills */
+    .nav-pills .nav-link{
+      color:var(--text); border-radius:999px; padding:.55rem .9rem;
+      border:1px solid transparent; transition: all .18s ease;
+    }
+    .nav-pills .nav-link:hover{ background:var(--panel); border-color:var(--border); color:var(--accent) }
+    .nav-pills .nav-link.active{
+      background:var(--primary); border-color:var(--primary-600); color:#fff;
+      box-shadow:0 6px 18px var(--ring);
+    }
+    .nav-utility .btn, .nav-utility .dropdown-toggle{ border-radius:12px }
+
+    /* Contenido */
+    main.container{ flex:1; padding-top:1.5rem; padding-bottom:2rem; max-width:1200px }
+    .glass-card{ background:var(--panel); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow) }
+
+    /* Tabla elegante */
+    .table-wrap{ overflow:auto; border-radius:14px; border:1px solid var(--border) }
+    .table{ margin:0 }
+    .table thead th{ background: color-mix(in oklab, var(--bg-soft), #000 5%); border-bottom:1px solid var(--border); font-weight:700; color:var(--muted) }
+    .table tbody tr{ transition: background .16s }
+    .table tbody tr:hover{ background: color-mix(in oklab, var(--bg-soft), #fff 4%) }
+
+    /* Focus visible accesible */
+    :where(a, button, .btn, .form-control, .nav-link, .dropdown-item):focus-visible{
+      outline: 2px solid var(--accent);
+      outline-offset:2px;
+    }
+
+    /* Mensajes */
+    .messages-wrapper{ max-width:1000px; margin:1rem auto 0 }
+
+    /* Footer */
+    .app-footer{ border-top:1px solid var(--border); background:var(--bg-soft); color:var(--muted); font-size:.95rem }
+
+    /* Botones */
+    .btn{ border-radius:12px }
+    .btn-primary{ background:var(--primary); border-color:var(--primary-600) }
+    .btn-primary:hover{ background:var(--primary-600); border-color:var(--primary-600) }
+
+    /* Toggler visible en cualquier tema */
+    .navbar-toggler{ border:1px solid var(--border) !important; color:var(--text) }
+    .navbar-toggler:focus{ box-shadow:none }
+
+    /* Avatar y user menu */
+    .avatar{
+      width:32px; height:32px; border-radius:999px; display:inline-grid; place-items:center;
+      background: color-mix(in oklab, var(--primary) 30%, var(--bg) 70%); color:#fff; font-weight:700;
+    }
+
+    /* Responsive mejoras */
+    @media (max-width: 991.98px){
+      .nav-pills.gap-2{ gap:.35rem }
+      .brand-title{ font-size:1rem }
+    }
+
+    /* Reduce motion si el user lo pide */
+    @media (prefers-reduced-motion: reduce) {
+      *{ transition:none !important; animation:none !important }
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<header class="app-header">
+  <nav class="navbar navbar-expand-lg container">
+    <a class="brand navbar-brand" href="{% url 'inicio' %}">
+      <img class="brand-logo" src="{% static 'img/logo.png' %}" alt="Logo Js Glitz" />
+      <span class="brand-title">Js Glitz · Gestión</span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+      <i class="bi bi-list" style="font-size:1.4rem;"></i>
+    </button>
+
+    {% url 'lista_productos' as url_lista_productos %}
+    {% url 'lista_movimientos' as url_lista_movimientos %}
+    {% url 'lista_categorias' as url_lista_categorias %}
+    {% url 'reportes_menu' as url_reportes_menu %}
+    {% url 'lista_autoria' as url_lista_autoria %} {# ← NUEVO #}
+    {% url 'inicio' as url_inicio %}
+    {% url 'login' as url_login %}
+    {% url 'ayuda' as url_ayuda %}
+
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto ms-lg-3 nav nav-pills gap-2">
+
+        {% if request.user.is_authenticated %}
+
+          {% if request.user|can:"productos.view_producto" and url_lista_productos %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'lista_productos' %}active{% endif %}"
+               href="{{ url_lista_productos }}">
+              <i class="bi bi-box-seam-fill me-1"></i> Inventario
+            </a>
+          </li>
+          {% endif %}
+
+          {# FIX: usar view_movimiento, no view_entrada/view_salida #}
+          {% if url_lista_movimientos and perms.productos.view_movimiento %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'lista_movimientos' %}active{% endif %}"
+               href="{{ url_lista_movimientos }}">
+              <i class="bi bi-arrow-left-right me-1"></i> Movimientos
+            </a>
+          </li>
+          {% endif %}
+
+          {% if perms.productos.view_categoria and url_lista_categorias %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'lista_categorias' %}active{% endif %}"
+               href="{{ url_lista_categorias }}">
+              <i class="bi bi-tags-fill me-1"></i> Categorías
+            </a>
+          </li>
+          {% endif %}
+
+          {% if perms.productos.ver_reportes and url_reportes_menu %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name|default:''|slice:":8" == 'reportes' %}active{% endif %}"
+               href="{{ url_reportes_menu }}">
+              <i class="bi bi-graph-up-arrow me-1"></i> Reportes
+            </a>
+          </li>
+          {% endif %}
+
+          {# NUEVO: Autoría debajo de Reportes #}
+          {% if perms.productos.ver_autoria and url_lista_autoria %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'lista_autoria' %}active{% endif %}"
+               href="{{ url_lista_autoria }}">
+              <i class="bi bi-journal-text me-1"></i> Autoría
+            </a>
+          </li>
+          {% endif %}
+
+          {% if request.user.is_superuser or request.user|in_group:"Administrador" %}
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/">
+              <i class="bi bi-shield-lock me-1"></i> Administración
+            </a>
+          </li>
+          {% endif %}
+
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'inicio' %}active{% endif %}"
+               href="{{ url_inicio|default:'#' }}">
+              <i class="bi bi-house-door-fill me-1"></i> Inicio
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+      
+            {# NUEVO: Ayuda, visible para usuarios autenticados #}
+      {% if url_ayuda %}
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'ayuda' %}active{% endif %}"
+           href="{{ url_ayuda }}">
+          <i class="bi bi-question-circle me-1"></i> Ayuda
+        </a>
+      </li>
+      {% endif %}
+
+
+      <ul class="navbar-nav ms-auto align-items-center gap-2 nav-utility">
+        <li class="nav-item me-1">
+          <button class="btn btn-outline-secondary btn-sm" id="themeToggle" type="button" title="Cambiar tema">
+            <i class="bi bi-sun-fill d-none" id="icon-light"></i>
+            <i class="bi bi-moon-stars-fill d-none" id="icon-dark"></i>
+            <i class="bi bi-circle-half" id="icon-auto"></i>
+          </button>
+        </li>
+
+        {% if request.user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="btn btn-outline-light btn-sm dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="avatar">{{ request.user.username|default:"U"|first|upper }}</span>
+              <span class="d-none d-sm-inline">{{ request.user.get_full_name|default:request.user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li class="dropdown-item-text text-muted small">
+                Sesión como <strong>{{ request.user.username }}</strong>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              {% if request.user.is_superuser %}
+              <li><a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2"></i>Administración</a></li>
+              {% endif %}
+              <li>
+                <form method="post" action="{% url 'logout' %}" class="px-3 py-1">
+                  {% csrf_token %}
+                  <button class="btn btn-danger btn-sm w-100"><i class="bi bi-box-arrow-right me-1"></i> Salir</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="btn btn-primary btn-sm" href="{{ url_login|default:'#' }}">
+              <i class="bi bi-door-open me-1"></i> Iniciar sesión
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+</header>
+
+{% if messages %}
+  <div class="messages-wrapper container">
+    {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-secondary{% endif %} alert-dismissible fade show glass-card mt-3" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<main class="container">
+  {% block content %}
+  <div class="p-4 glass-card">
+    <h1 class="h4 mb-3">Bienvenido</h1>
+    <p class="text-muted">Este es un placeholder por si alguien olvida llenar el bloque. Sí, pasa más de lo que crees.</p>
+  </div>
+  {% endblock %}
+</main>
+
+<footer class="app-footer py-3 mt-auto">
+  <div class="container d-flex align-items-center justify-content-between">
+    <span>Js Glitz &copy; 2025 — Plataforma de gestión premium 🇨🇴💎</span>
+    <span class="small">v1.1</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Tema: auto / light / dark con preferencia persistida
+  (function(){
+    const html = document.documentElement;
+    const saved = localStorage.getItem("theme") || "auto";
+    const setIcons = (mode)=>{
+      document.getElementById("icon-light").classList.add("d-none");
+      document.getElementById("icon-dark").classList.add("d-none");
+      document.getElementById("icon-auto").classList.add("d-none");
+      document.getElementById(mode === "light" ? "icon-light" : mode === "dark" ? "icon-dark" : "icon-auto").classList.remove("d-none");
+    };
+    const apply = (mode)=>{
+      html.setAttribute("data-theme", mode);
+      if(mode === "auto"){
+        html.removeAttribute("data-bs-theme");
+      }else{
+        html.setAttribute("data-bs-theme", mode);
+      }
+      setIcons(mode);
+    };
+    apply(saved);
+    const next = {auto:"light", light:"dark", dark:"auto"};
+    document.getElementById("themeToggle").addEventListener("click", ()=>{
+      const cur = html.getAttribute("data-theme") || "auto";
+      const m = next[cur] || "auto";
+      localStorage.setItem("theme", m);
+      apply(m);
+    });
+  })();
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

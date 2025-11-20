@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Reporte de Entradas - Js Glitz{% endblock %}
+{% block content %}
+<h2 class="text-center text-success">📈 Reporte de Entradas</h2>
+
+<form method="get" class="row g-2 mt-2 align-items-end">
+  <div class="col-lg-3 col-md-4">
+    <label class="form-label">Buscar</label>
+    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Nombre o ID del producto">
+  </div>
+
+  <div class="col-lg-2 col-md-3">
+    <label class="form-label">Producto</label>
+    <select name="producto" class="form-select">
+      <option value="">Todos</option>
+      {% for p in productos %}
+        <option value="{{ p.id }}" {% if producto|add:'' == p.id|add:'' %}selected{% endif %}>{{ p.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-lg-2 col-md-3">
+    <label class="form-label">Categoría</label>
+    <select name="categoria" class="form-select">
+      <option value="">Todas</option>
+      {% for c in categorias %}
+        <option value="{{ c.id }}" {% if categoria|add:'' == c.id|add:'' %}selected{% endif %}>{{ c.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-lg-2 col-md-3">
+    <label class="form-label">Desde</label>
+    <input type="date" name="desde" value="{{ desde }}" class="form-control">
+  </div>
+
+  <div class="col-lg-2 col-md-3">
+    <label class="form-label">Hasta</label>
+    <input type="date" name="hasta" value="{{ hasta }}" class="form-control">
+  </div>
+
+  <div class="col-12 d-flex flex-wrap gap-2 mt-2">
+    <button class="btn btn-primary"><i class="bi bi-funnel"></i> Filtrar</button>
+    <a href="{% url 'reporte_entradas' %}" class="btn btn-outline-secondary"><i class="bi bi-eraser"></i> Limpiar</a>
+    <a href="{% url 'exportar_entradas_excel' %}?{{ request.GET.urlencode }}" class="btn btn-success">
+      <i class="bi bi-file-earmark-excel"></i> Descargar Excel
+    </a>
+    <a href="{% url 'reportes_menu' %}" class="btn btn-primary ms-auto"><i class="bi bi-arrow-left"></i> Volver</a>
+  </div>
+</form>
+
+<div class="card mt-3">
+  <div class="card-body p-2">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th class="text-end">Cantidad</th>
+            <th>Fecha</th>
+            <th>Observación</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in movimientos %}
+          <tr>
+            <td>{{ m.id }}</td>
+            <td>{{ m.producto.nombre }}</td>
+            <td>{{ m.producto.categoria.nombre }}</td>
+            <td class="text-end">{{ m.cantidad }}</td>
+            <td>{{ m.fecha|date:"Y-m-d H:i" }}</td>
+            <td>{{ m.observacion|default:"-" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted">No hay entradas con esos filtros.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr class="fw-bold">
+            <td colspan="3" class="text-end">Total</td>
+            <td class="text-end">{{ total_cant }}</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Ajustes visuales suaves */
+  form .form-label {
+    font-weight: 500;
+  }
+  input[type="date"] {
+    min-width: 150px;
+  }
+  select.form-select {
+    max-width: 100%;
+  }
+</style>
+{% endblock %}

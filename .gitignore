@@ -1,0 +1,43 @@
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.sqlite3
+.env
+.vscode/
+.idea/
+# Python / Django
+venv/
+.venv/
+.env
+__pycache__/
+*.pyc
+db.sqlite3
+*.log
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+
+# Node (por si hay frontend mezclado)
+node_modules/
+dist/
+# Python / Django
+venv/
+.venv/
+.env
+__pycache__/
+*.pyc
+db.sqlite3
+*.log
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+
+# Node (por si hay frontend mezclado)
+node_modules/
+dist/

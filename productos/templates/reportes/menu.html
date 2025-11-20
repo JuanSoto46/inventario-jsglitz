@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load roles %}
+{% block title %}Reportes - Js Glitz{% endblock %}
+{% block content %}
+{% if not request.user|can:"productos.ver_reportes" %}
+  <div class="alert alert-secondary">No tienes permisos para ver reportes.</div>
+{% else %}
+<h2 class="text-center text-primary">📊 Reportes</h2>
+
+<div class="row g-3 mt-2">
+  <div class="col-md-4">
+    <a href="{% url 'reporte_entradas' %}" class="card card-menu text-decoration-none p-3 h-100">
+      <h4 class="mb-1"><i class="bi bi-arrow-down-circle"></i> Entradas</h4>
+      <p class="text-muted mb-0">Filtros + tabla + Excel</p>
+    </a>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card card-menu p-3 h-100 opacity-75">
+      <h4 class="mb-1"><i class="bi bi-arrow-up-circle"></i> Salidas</h4>
+      <p class="text-muted mb-0">Próximamente</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card card-menu p-3 h-100 opacity-75">
+      <h4 class="mb-1"><i class="bi bi-clipboard-data"></i> Inventario total</h4>
+      <p class="text-muted mb-0">Próximamente</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

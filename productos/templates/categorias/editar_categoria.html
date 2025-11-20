@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Editar Categoría</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary me-2">Actualizar</button>
+                    <a href="{% url 'lista_categorias' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

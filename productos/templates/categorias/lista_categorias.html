@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Categorías - Js Glitz{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-danger fw-bold">
+        <i class="bi bi-tags-fill me-2"></i> Gestión de Categorías
+    </h2>
+    <a href="{% url 'crear_categoria' %}" class="btn btn-success rounded-3 shadow-sm px-4 py-2">
+        <i class="bi bi-plus-circle me-1"></i> Nueva Categoría
+    </a>
+</div>
+
+<div class="card bg-dark border-0 shadow-lg rounded-4 p-4">
+    <div class="table-responsive">
+        <table class="table table-hover table-dark align-middle mb-0">
+            <thead class="table-danger text-white text-center">
+                <tr>
+                    <th>Nombre</th>
+                    <th style="width: 200px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr class="text-center">
+                    <td class="text-start ps-3">{{ categoria.nombre }}</td>
+                    <td>
+                        <a href="{% url 'editar_categoria' categoria.id %}" class="btn btn-outline-warning btn-sm me-2 rounded-pill">
+                            <i class="bi bi-pencil-fill me-1"></i> Editar
+                        </a>
+                        <a href="{% url 'eliminar_categoria' categoria.id %}" class="btn btn-outline-danger btn-sm rounded-pill">
+                            <i class="bi bi-trash3-fill me-1"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center text-muted py-4">
+                        <i class="bi bi-inbox me-2"></i> No hay categorías registradas aún.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

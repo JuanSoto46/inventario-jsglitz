@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load roles %}
+{% block title %}Inventario - Js Glitz{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4" style="color:#ff4b5c;">
+    <i class="bi bi-box-seam-fill"></i> Inventario de Productos
+  </h2>
+
+  <div class="row text-center mb-4">
+    <div class="col-md-6">
+      <div class="p-3 bg-dark border border-danger rounded-3">
+        <h5 class="text-secondary">Total de referencias</h5>
+        <p class="fs-3 fw-bold text-white">{{ productos|length }}</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="p-3 bg-dark border border-danger rounded-3">
+        <h5 class="text-secondary">Costo total del inventario</h5>
+        <p class="fs-3 fw-bold text-white">${{ costo_total|floatformat:"0" }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <div class="btn-group">
+      {% if request.user|can:"productos.add_producto" %}
+      <a href="{% url 'crear_producto' %}" class="btn btn-success fw-bold">➕ Añadir producto</a>
+      {% endif %}
+      {% if request.user|can:"productos.view_categoria" %}
+      <a href="{% url 'lista_categorias' %}" class="btn btn-outline-light fw-bold">📂 Categorías</a>
+      {% endif %}
+      {% if request.user|can:"productos.add_entrada" or request.user|can:"productos.add_salida" %}
+      <a href="{% url 'crear_movimiento' %}" class="btn btn-warning fw-bold text-dark">🔁 Movimiento</a>
+      {% endif %}
+    </div>
+
+    <form method="GET" class="d-flex" style="max-width:300px;">
+      <input type="text" name="q" class="form-control me-2 bg-dark text-light border border-danger" placeholder="🔍 Buscar producto..." value="{{ request.GET.q }}">
+      <button class="btn btn-outline-danger" type="submit">Buscar</button>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-dark table-hover align-middle text-center">
+      <thead class="table-danger">
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Categoría</th><th>Descripción</th>
+          <th>Cantidad</th><th>Costo</th><th>Precio venta</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for producto in productos %}
+        <tr>
+          <td>{{ producto.id }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.categoria }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.cantidad }}</td>
+          <td>${{ producto.costo|floatformat:0 }}</td>
+          <td>${{ producto.precio_venta|floatformat:0 }}</td>
+          <td>
+            {% if request.user|can:"productos.change_producto" %}
+            <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-warning">✏</a>
+            {% endif %}
+            {% if request.user|can:"productos.delete_producto" %}
+            <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-danger">🗑</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="text-center text-muted">No hay productos registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

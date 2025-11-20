@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}Autoría - Inventario{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2 class="mb-1">Autoría del sistema</h2>
+    <p class="text-muted small mb-0">
+      Aquí ves quién hizo qué, sobre qué registro, cuándo y qué campos cambiaron.
+    </p>
+  </div>
+</div>
+
+<form class="row g-2 mb-3 align-items-end" method="get">
+  <div class="col-md-3 col-sm-6">
+    <label class="form-label small mb-1">Búsqueda libre</label>
+    <input class="form-control"
+           name="q"
+           placeholder="Usuario, acción, entidad, id..."
+           value="{{ q }}">
+  </div>
+
+  <div class="col-md-2 col-sm-6">
+    <label class="form-label small mb-1">Entidad</label>
+    <select class="form-select" name="entidad">
+      <option value="">Todas</option>
+      {% for e in entidades %}
+        <option value="{{ e }}" {% if e == entidad %}selected{% endif %}>{{ e }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2 col-sm-6">
+    <label class="form-label small mb-1">Acción</label>
+    <select class="form-select" name="accion">
+      <option value="">Todas</option>
+      {% for a in acciones %}
+        <option value="{{ a }}" {% if a == accion %}selected{% endif %}>{{ a }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2 col-sm-6">
+    <label class="form-label small mb-1">Desde</label>
+    <input type="date" class="form-control" name="desde" value="{{ desde }}">
+  </div>
+
+  <div class="col-md-2 col-sm-6">
+    <label class="form-label small mb-1">Hasta</label>
+    <input type="date" class="form-control" name="hasta" value="{{ hasta }}">
+  </div>
+
+  <div class="col-md-1 col-sm-4">
+    <button class="btn btn-primary w-100">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+</form>
+
+<div class="glass-card p-0">
+  <div class="table-wrap">
+    <table class="table table-dark table-striped align-middle mb-0">
+      <thead>
+        <tr>
+          <th style="min-width: 160px;">Fecha</th>
+          <th style="min-width: 160px;">Usuario</th>
+          <th style="min-width: 180px;">Acción / Entidad</th>
+          <th style="min-width: 260px;">Cambios de campos</th>
+          <th style="min-width: 200px;">Contexto</th>
+          <th style="min-width: 160px;" class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for it in items %}
+        <tr>
+          <td>
+            <div class="fw-semibold">{{ it.created_at|date:"Y-m-d H:i" }}</div>
+            <div class="text-muted small">{{ it.created_at|timesince }} atrás</div>
+          </td>
+
+          <td>
+            <div class="fw-semibold">{{ it.usuario_label }}</div>
+            <div class="text-muted small">
+              IP: {{ it.ip|default:"-" }}
+            </div>
+          </td>
+
+          <td>
+            <div>
+              <span class="badge bg-primary">{{ it.action_label }}</span>
+            </div>
+            <div class="text-muted small mt-1">
+              {{ it.entity_label }}
+            </div>
+          </td>
+
+          <td class="small">
+            {% if it.resumen_cambios %}
+              <ul class="mb-1 ps-3">
+                {% for cambio in it.resumen_cambios|slice:":4" %}
+                  <li>
+                    <code>{{ cambio.campo }}</code>:
+                    <span class="text-muted">{{ cambio.antes|default:"—" }}</span>
+                    <i class="bi bi-arrow-right-short"></i>
+                    <span class="text-warning-emphasis">{{ cambio.despues|default:"—" }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+              {% if it.resumen_cambios|length > 4 %}
+                <span class="badge bg-secondary-subtle text-muted border border-secondary-subtle">
+                  + {{ it.resumen_cambios|length|add:"-4" }} campos más
+                </span>
+              {% endif %}
+            {% else %}
+              <span class="text-muted">Sin cambios de campos (p. ej. eliminación o evento simple).</span>
+            {% endif %}
+          </td>
+
+          <td class="small">
+            {% if it.user_agent or it.extra %}
+              <details>
+                <summary class="small text-muted">Ver contexto</summary>
+                <div class="mt-1 small text-break">
+                  {% if it.user_agent %}
+                    <div><span class="text-muted">Navegador:</span> {{ it.user_agent }}</div>
+                  {% endif %}
+                  {% if it.extra %}
+                    <div class="mt-1">
+                      <span class="text-muted">Extra:</span>
+                      <pre class="mb-0 small"><code>{{ it.extra|safe }}</code></pre>
+                    </div>
+                  {% endif %}
+                </div>
+              </details>
+            {% else %}
+              <span class="text-muted">–</span>
+            {% endif %}
+          </td>
+
+          <td class="text-center">
+            <form method="post"
+                  action="{% url 'deshacer_autoria' it.id %}"
+                  class="d-inline">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-outline-warning"
+                      onclick="return confirm('¿Deshacer este cambio en {{ it.entity_label }}?');">
+                Deshacer
+              </button>
+            </form>
+
+            <form method="post"
+                  action="{% url 'eliminar_autoria' it.id %}"
+                  class="d-inline ms-1">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-outline-danger"
+                      onclick="return confirm('¿Eliminar este registro de autoría?');">
+                Eliminar
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-4 text-muted">
+            Sin registros de autoría.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

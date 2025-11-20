@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% block title %}Centro de ayuda{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Centro de ayuda</h2>
+      <p class="text-muted mb-0 small">
+        Aquí el usuario encuentra soporte rápido: asistente virtual, videos cortos y canales de contacto con la empresa.
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- 1. Asistente virtual (simulación IA) -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header d-flex align-items-center">
+          <i class="bi bi-robot fs-4 me-2"></i>
+          <div>
+            <h5 class="mb-0">Asistente virtual</h5>
+            <small class="text-muted">Chat tipo IA para resolver dudas frecuentes</small>
+          </div>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div id="chat-messages"
+               class="border rounded p-2 mb-2 bg-body-tertiary"
+               style="height: 230px; overflow-y: auto;">
+            <div class="mb-2">
+              <div class="small text-muted mb-1">Asistente</div>
+              <div class="p-2 rounded small bg-secondary-subtle text-dark">
+                Hola 👋 Soy el asistente virtual del sistema de inventarios.
+                Puedes preguntar por registro de productos, movimientos, reportes o cómo contactar soporte.
+              </div>
+            </div>
+            <div class="mb-2">
+              <div class="small text-muted mb-1">Ejemplos de preguntas</div>
+              <ul class="small mb-0 ps-3">
+                <li>¿Cómo registro un nuevo producto?</li>
+                <li>¿Dónde veo los movimientos más recientes?</li>
+                <li>¿Cómo descargo el reporte de entradas?</li>
+                <li>¿Cómo contacto al área de soporte?</li>
+              </ul>
+            </div>
+          </div>
+
+          <form class="mt-2" id="chat-form">
+            <label class="form-label small">Escribe tu duda</label>
+            <div class="input-group">
+              <input type="text"
+                     class="form-control"
+                     id="chat-input"
+                     placeholder="Ej: Cómo registrar una salida de inventario">
+              <button class="btn btn-primary" type="submit">
+                Enviar
+              </button>
+            </div>
+            <small class="text-muted d-block mt-1">
+              *En esta versión académica el asistente da respuestas básicas guiadas. Para casos complejos se recomienda contactar soporte.
+            </small>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Videos de ayuda -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header d-flex align-items-center">
+          <i class="bi bi-play-circle fs-4 me-2"></i>
+          <div>
+            <h5 class="mb-0">Videos de ayuda rápida</h5>
+            <small class="text-muted">Tutoriales cortos sobre las tareas más usadas</small>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="ratio ratio-16x9 rounded overflow-hidden">
+              <!-- Cambia el src cuando tengas tus propios videos -->
+              <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                      title="Video: Registro de productos"
+                      allowfullscreen></iframe>
+            </div>
+            <small class="d-block mt-1 fw-semibold">1. Registrar y editar productos</small>
+            <small class="text-muted">Explica el formulario de productos y los campos obligatorios.</small>
+          </div>
+
+          <div class="mb-3">
+            <div class="ratio ratio-16x9 rounded overflow-hidden">
+              <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                      title="Video: Movimientos de inventario"
+                      allowfullscreen></iframe>
+            </div>
+            <small class="d-block mt-1 fw-semibold">2. Registrar entradas y salidas</small>
+            <small class="text-muted">Muestra el uso del módulo de movimientos y su impacto en el stock.</small>
+          </div>
+
+          <div>
+            <div class="ratio ratio-16x9 rounded overflow-hidden">
+              <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                      title="Video: Reportes"
+                      allowfullscreen></iframe>
+            </div>
+            <small class="d-block mt-1 fw-semibold">3. Generar y descargar reportes</small>
+            <small class="text-muted">Guía para el módulo de reportes y exportación a Excel.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Contacto con la empresa -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header d-flex align-items-center">
+          <i class="bi bi-headset fs-4 me-2"></i>
+          <div>
+            <h5 class="mb-0">Contacto con la empresa</h5>
+            <small class="text-muted">Canales directos de soporte al cliente</small>
+          </div>
+        </div>
+        <div class="card-body row g-3">
+          <div class="col-md-4">
+            <h6>Correo de soporte</h6>
+            <p class="small text-muted mb-2">
+              Para dudas técnicas o reportar fallos en la plataforma.
+            </p>
+            {# Abrir directamente Gmail con el correo compuesto #}
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=javier.pantoja@correounivalle.edu.co&su=Soporte%20Inventario&body=Hola,%20necesito%20ayuda%20con%20el%20sistema%20de%20inventarios."
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-envelope"></i> Enviar correo a soporte
+            </a>
+            <small class="d-block mt-1 text-muted small">
+              Correo: javier.pantoja@correounivalle.edu.co
+            </small>
+          </div>
+
+          <div class="col-md-4">
+            <h6>WhatsApp empresarial</h6>
+            <p class="small text-muted mb-2">
+              Atención rápida en horario laboral.
+            </p>
+            {# Abrir WhatsApp Web / app con mensaje prellenado #}
+            <a href="https://api.whatsapp.com/send?phone=573116230841&text=Hola,%20necesito%20ayuda%20con%20el%20sistema%20de%20inventarios"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-outline-success btn-sm">
+              <i class="bi bi-whatsapp"></i> Escribir por WhatsApp
+            </a>
+            <small class="d-block mt-1 text-muted small">
+              Teléfono: 311 623 0841
+            </small>
+          </div>
+
+          <div class="col-md-4">
+            <h6>Información adicional</h6>
+            <ul class="small text-muted mb-0">
+              <li>Horario: Lunes a viernes, 8:00 am a 6:00 pm.</li>
+              <li>Tiempo de respuesta estimado: 24 horas hábiles.</li>
+              <li>Prioridad para incidentes críticos de operación.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+
+    if (!form || !input || !messages) {
+      return;
+    }
+
+    function appendMessage(author, text, isUser) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mb-2';
+
+      const label = document.createElement('div');
+      label.className = 'small text-muted mb-1';
+      label.textContent = author;
+      wrapper.appendChild(label);
+
+      const bubble = document.createElement('div');
+      bubble.className = 'p-2 rounded small ' + (isUser ? 'bg-primary text-white' : 'bg-secondary-subtle text-dark');
+      bubble.textContent = text;
+      wrapper.appendChild(bubble);
+
+      messages.appendChild(wrapper);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function containsAny(text, words) {
+      return words.some(function (w) { return text.includes(w); });
+    }
+
+    form.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      const text = input.value.trim();
+      if (!text) {
+        return;
+      }
+
+      appendMessage('Tú', text, true);
+
+      const lower = text.toLowerCase();
+      let reply;
+
+      // ---------- Productos ----------
+      if (containsAny(lower, ['producto', 'productos']) && containsAny(lower, ['crear', 'registrar', 'agregar', 'nuevo'])) {
+        reply = 'Para registrar un producto, ve al menú "Inventario" → "Crear producto". Completa nombre, categoría, stock inicial y precio. Luego guarda el formulario.';
+      } else if (containsAny(lower, ['producto', 'productos']) && containsAny(lower, ['editar', 'modificar', 'actualizar', 'cambiar'])) {
+        reply = 'Para editar un producto existente, entra al menú "Inventario", busca el producto en la tabla y usa el botón de editar. Cambia los datos necesarios y guarda.';
+      } else if (containsAny(lower, ['producto', 'productos']) && containsAny(lower, ['eliminar', 'borrar', 'quitar'])) {
+        reply = 'Para eliminar un producto, entra al menú "Inventario", ubica el producto y usa el botón de eliminar. Ten en cuenta que impacta el histórico del inventario, así que se recomienda usar esta opción con cuidado.';
+
+      // ---------- Categorías ----------
+      } else if (containsAny(lower, ['categoria', 'categoría', 'categorias', 'categorías'])) {
+        reply = 'Las categorías se gestionan desde el menú "Categorías". Allí puedes crear nuevas categorías, editarlas o eliminarlas. Luego se usan al registrar productos para organizar el inventario.';
+
+      // ---------- Movimientos ----------
+      } else if (containsAny(lower, ['movimiento', 'movimientos', 'entrada', 'salida', 'salidas', 'entradas'])) {
+        if (containsAny(lower, ['crear', 'registrar', 'nuevo', 'agregar'])) {
+          reply = 'Para registrar un movimiento, ve al menú "Movimientos" → "Crear movimiento". Escoge si es entrada o salida, selecciona el producto, la cantidad y guarda. El sistema actualiza el stock automáticamente.';
+        } else if (containsAny(lower, ['editar', 'modificar']) || containsAny(lower, ['me equivoque', 'me equivoqué'])) {
+          reply = 'Si te equivocaste en un movimiento, la forma recomendada es registrar un movimiento inverso (por ejemplo, una entrada corrigiendo una salida) para dejar trazabilidad clara.';
+        } else if (containsAny(lower, ['stock', 'inventario', 'cantidad'])) {
+          reply = 'El stock actual de cada producto se ve en el módulo "Inventario". Los movimientos de entrada y salida van ajustando automáticamente esas cantidades.';
+        } else {
+          reply = 'Los movimientos se gestionan desde el menú "Movimientos". Allí puedes registrar entradas y salidas, que impactan el stock de los productos.';
+        }
+
+      // ---------- Reportes ----------
+      } else if (containsAny(lower, ['reporte', 'reportes', 'informe', 'informes', 'excel'])) {
+        if (containsAny(lower, ['descargar', 'exportar', 'bajar'])) {
+          reply = 'Los reportes se descargan desde el menú "Reportes". Filtras por rango de fechas y luego usas la opción de exportar a Excel para obtener el archivo.';
+        } else if (containsAny(lower, ['entradas']) || containsAny(lower, ['salidas'])) {
+          reply = 'En el módulo "Reportes" puedes filtrar por fechas y tipo de movimiento (entradas/salidas) para analizar el comportamiento del inventario en un periodo.';
+        } else {
+          reply = 'En el menú "Reportes" encuentras resúmenes de los movimientos. Desde allí puedes filtrar por fecha y exportar a Excel para análisis más detallado.';
+        }
+
+      // ---------- Autoría / auditoría ----------
+      } else if (containsAny(lower, ['autoria', 'autoría', 'auditoria', 'auditoría', 'historial'])) {
+        if (containsAny(lower, ['deshacer', 'revertir', 'reversa', 'volver atras', 'volver atrás'])) {
+          reply = 'En el módulo "Autoría" puedes ver el historial de cambios. Si un registro admite reversa, puedes usar el botón "Deshacer" para intentar volver al estado anterior (por ejemplo, una actualización reciente).';
+        } else if (containsAny(lower, ['eliminar', 'borrar'])) {
+          reply = 'En "Autoría" también existe la opción de eliminar registros de autoría que ya no necesites conservar. Eso no borra el producto ni el movimiento, solo el registro histórico.';
+        } else {
+          reply = 'El módulo "Autoría" muestra quién hizo qué cambio, sobre qué registro y cuándo. Sirve para auditoría y control de cambios dentro del sistema.';
+        }
+
+      // ---------- Login / acceso ----------
+      } else if (containsAny(lower, ['login', 'iniciar sesión', 'iniciar sesion', 'entrar']) || containsAny(lower, ['contraseña', 'clave', 'password'])) {
+        if (containsAny(lower, ['olvide', 'olvidé', 'recuperar'])) {
+          reply = 'Si olvidaste la contraseña, la recuperación depende de cómo esté configurado el sistema en producción. En esta versión académica, el administrador puede ayudarte a restablecerla desde el panel de usuarios.';
+        } else {
+          reply = 'Para acceder al sistema debes iniciar sesión con tu usuario y contraseña asignados. Si no tienes acceso, comunícate con el administrador del sistema.';
+        }
+
+      // ---------- Contacto / soporte ----------
+      } else if (containsAny(lower, ['contacto', 'soporte', 'ayuda', 'telefono', 'teléfono', 'whatsapp', 'correo', 'email'])) {
+        reply = 'Para soporte directo puedes escribir al correo javier.pantoja@correounivalle.edu.co o al WhatsApp 311 623 0841. El horario de atención es de lunes a viernes, 8:00 am a 6:00 pm.';
+
+      // ---------- Ayuda general / videos / manual ----------
+      } else if (containsAny(lower, ['manual', 'tutorial', 'video', 'cómo usar', 'como usar', 'ayuda general'])) {
+        reply = 'En esta misma página, en la sección de videos de ayuda, tienes tutoriales cortos sobre cómo registrar productos, movimientos y generar reportes. También puedes usar este asistente para resolver dudas puntuales.';
+
+      // ---------- Fallback genérico ----------
+      } else {
+        reply = 'He leído tu pregunta y por ahora te puedo dar respuestas generales sobre productos, movimientos, reportes, autoría y contacto de soporte. ' +
+                'Si tu duda es muy específica, puedes escribir a javier.pantoja@correounivalle.edu.co o al WhatsApp 311 623 0841 para una atención más detallada.';
+      }
+
+      setTimeout(function () {
+        appendMessage('Asistente', reply, false);
+      }, 250);
+
+      input.value = '';
+    });
+  });
+</script>
+
+{% endblock %}

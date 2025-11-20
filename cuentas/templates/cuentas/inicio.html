@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load roles %}
+{% block title %}Inicio — Js Glitz{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Bienvenido, {{ request.user.first_name|default:request.user.username }} 🍷</h2>
+
+{% if request.user.is_superuser or request.user|in_group:"Administrador" %}
+  <div class="alert alert-danger"><i class="bi bi-shield-lock"></i> Eres Administrador: acceso total al sistema.</div>
+{% elif request.user|in_group:"Bodeguero" %}
+  <div class="alert alert-info"><i class="bi bi-box-seam"></i> Eres Bodeguero: controla el inventario.</div>
+{% elif request.user|in_group:"Vendedor" %}
+  <div class="alert alert-success"><i class="bi bi-cash-coin"></i> Eres Vendedor: gestiona las ventas.</div>
+{% else %}
+  <div class="alert alert-secondary"><i class="bi bi-person"></i> No tienes un rol asignado aún.</div>
+{% endif %}
+
+<div class="row g-4 mt-2">
+  {% if request.user|can:"productos.view_producto" %}
+  <div class="col-md-4">
+    <a href="{% url 'lista_productos' %}" class="card card-menu text-decoration-none">
+      <div class="card-body text-center">
+        <h4><i class="bi bi-box"></i> Inventario</h4>
+        <p>Gestiona productos</p>
+      </div>
+    </a>
+  </div>
+  {% endif %}
+
+  {% if request.user|can:"productos.view_movimiento" %}
+  <div class="col-md-4">
+    <a href="{% url 'lista_movimientos' %}" class="card card-menu text-decoration-none">
+      <div class="card-body text-center">
+        <h4><i class="bi bi-arrow-repeat"></i> Movimientos</h4>
+        <p>Entradas y salidas</p>
+      </div>
+    </a>
+  </div>
+  {% endif %}
+
+  {% if request.user|can:"productos.ver_reportes" %}
+  <div class="col-md-4">
+    <a href="{% url 'reportes_menu' %}" class="card card-menu text-decoration-none">
+      <div class="card-body text-center">
+        <h4><i class="bi bi-bar-chart"></i> Reportes</h4>
+        <p>Estadísticas y análisis</p>
+      </div>
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
