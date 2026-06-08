@@ -23,10 +23,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: 4. Verificar migraciones
-        run: python manage.py migrate --check
+        run: python manage.py migrate --run-syncdb
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: 'True'
+          DJANGO_SETTINGS_MODULE: js_glitz_inventarios.settings
 
       - name: 5. Ejecutar pruebas
         run: python manage.py test
