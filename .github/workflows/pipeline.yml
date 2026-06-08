@@ -25,17 +25,17 @@ jobs:
       - name: 4. Verificar migraciones
         run: python manage.py migrate --check
         env:
-          SECRET_KEY: test-secret-key-solo-para-ci
+          SECRET_KEY: SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: 'True'
 
       - name: 5. Ejecutar pruebas
         run: python manage.py test
         env:
-          SECRET_KEY: test-secret-key-solo-para-ci
+          SECRET_KEY: SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: 'True'
 
       - name: 6. Colectar archivos estaticos
         run: python manage.py collectstatic --noinput
         env:
-          SECRET_KEY: test-secret-key-solo-para-ci
+          SECRET_KEY: SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: 'True'
